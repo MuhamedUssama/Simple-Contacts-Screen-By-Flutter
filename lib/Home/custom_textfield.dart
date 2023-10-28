@@ -16,23 +16,42 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(50),
-      child: TextFormField(
-        controller: controller,
-        keyboardType: type,
-        textInputAction: action,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.all(20),
-          border: InputBorder.none,
-          hintText: title,
-          hintStyle: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-          fillColor: Colors.white,
-          filled: true,
-          suffixIcon: Icon(icon, color: Colors.blue),
+    return TextFormField(
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "This field can't be empty";
+        }
+        return null;
+      },
+      controller: controller,
+      keyboardType: type,
+      textInputAction: action,
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.all(20),
+        border: InputBorder.none,
+        hintText: title,
+        hintStyle: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+        fillColor: Colors.white,
+        filled: true,
+        suffixIcon: Icon(icon, color: Colors.blue),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: const BorderSide(color: Colors.transparent),
         ),
       ),
     );
