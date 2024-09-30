@@ -6,20 +6,24 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType type;
   final TextInputAction action;
   final IconData icon;
-  const CustomTextFormField(
-      {super.key,
-      required this.controller,
-      required this.title,
-      required this.type,
-      required this.action,
-      required this.icon});
+  final String validatorMessage;
+
+  const CustomTextFormField({
+    super.key,
+    required this.controller,
+    required this.title,
+    required this.type,
+    required this.action,
+    required this.icon,
+    required this.validatorMessage,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return "This field can't be empty";
+          return validatorMessage;
         }
         return null;
       },

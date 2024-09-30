@@ -14,9 +14,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late TextEditingController nameController;
   late TextEditingController phoneController;
-  ContactModel contact1 = ContactModel(isVisible: false, name: "", phone: "");
-  ContactModel contact2 = ContactModel(isVisible: false, name: "", phone: "");
-  ContactModel contact3 = ContactModel(isVisible: false, name: "", phone: "");
+
+  List<ContactModel> contacts = [];
+
+  // ContactModel contact1 = ContactModel(isVisible: false, name: "", phone: "");
+  // ContactModel contact2 = ContactModel(isVisible: false, name: "", phone: "");
+  // ContactModel contact3 = ContactModel(isVisible: false, name: "", phone: "");
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -38,6 +41,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
         title: const Text("Contacts Screen"),
         centerTitle: true,
       ),
@@ -56,6 +60,7 @@ class _HomePageState extends State<HomePage> {
                   type: TextInputType.name,
                   action: TextInputAction.next,
                   icon: Icons.edit,
+                  validatorMessage: 'Please enter your name',
                 ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
@@ -64,6 +69,7 @@ class _HomePageState extends State<HomePage> {
                   type: TextInputType.phone,
                   action: TextInputAction.done,
                   icon: Icons.phone,
+                  validatorMessage: 'Please enter your phone',
                 ),
                 const SizedBox(height: 30),
                 Row(
@@ -71,28 +77,7 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          if (formKey.currentState?.validate() ?? false) {
-                            if (contact1.isVisible == false) {
-                              contact1.isVisible = true;
-                              contact1.name = nameController.text;
-                              contact1.phone = phoneController.text;
-                              nameController.clear();
-                              phoneController.clear();
-                            } else if (contact2.isVisible == false) {
-                              contact2.isVisible = true;
-                              contact2.name = nameController.text;
-                              contact2.phone = phoneController.text;
-                              nameController.clear();
-                              phoneController.clear();
-                            } else {
-                              contact3.isVisible = true;
-                              contact3.name = nameController.text;
-                              contact3.phone = phoneController.text;
-                              nameController.clear();
-                              phoneController.clear();
-                            }
-                            setState(() {});
-                          }
+                          addButton();
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
@@ -111,14 +96,7 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          if (contact3.isVisible == true) {
-                            contact3.isVisible = false;
-                          } else if (contact2.isVisible == true) {
-                            contact2.isVisible = false;
-                          } else {
-                            contact1.isVisible = false;
-                          }
-                          setState(() {});
+                          deleteButton();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
@@ -130,23 +108,84 @@ class _HomePageState extends State<HomePage> {
                         child: const Text(
                           "Delete",
                           style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
-                ContactItem(contact: contact1),
-                const SizedBox(height: 30),
-                ContactItem(contact: contact2),
-                const SizedBox(height: 30),
-                ContactItem(contact: contact3),
+                const SizedBox(height: 15),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      child: ContactItem(contact: contacts[index]),
+                    ),
+                  ),
+                  itemCount: contacts.length,
+                ),
+                // ContactItem(contact: contact1),
+                // const SizedBox(height: 30),
+                // ContactItem(contact: contact2),
+                // const SizedBox(height: 30),
+                // ContactItem(contact: contact3),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void addButton() {
+    if (formKey.currentState?.validate() ?? false) {
+      contacts.add(
+        ContactModel(
+          isVisible: true,
+          name: nameController.text,
+          phone: phoneController.text,
+        ),
+      );
+      nameController.clear();
+      phoneController.clear();
+      // if (contact1.isVisible == false) {
+      //   contact1.isVisible = true;
+      //   contact1.name = nameController.text;
+      //   contact1.phone = phoneController.text;
+      //   nameController.clear();
+      //   phoneController.clear();
+      // } else if (contact2.isVisible == false) {
+      //   contact2.isVisible = true;
+      //   contact2.name = nameController.text;
+      //   contact2.phone = phoneController.text;
+      //   nameController.clear();
+      //   phoneController.clear();
+      // } else {
+      //   contact3.isVisible = true;
+      //   contact3.name = nameController.text;
+      //   contact3.phone = phoneController.text;
+      //   nameController.clear();
+      //   phoneController.clear();
+      // }
+      setState(() {});
+    }
+  }
+
+  void deleteButton() {
+    if (contacts.isNotEmpty) {
+      contacts.removeLast();
+      setState(() {});
+    }
+
+    // if (contact3.isVisible == true) {
+    //   contact3.isVisible = false;
+    // } else if (contact2.isVisible == true) {
+    //   contact2.isVisible = false;
+    // } else {
+    //   contact1.isVisible = false;
+    // }
   }
 }
